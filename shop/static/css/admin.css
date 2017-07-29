@@ -1,0 +1,30 @@
+table {
+    table-layout: fixed;
+}
+
+.product-photo {
+    width: 25%;
+}
+
+a[href]:after {
+    display: none;
+}
+
+@media print {
+    @page {
+        size: auto;
+        margin: 0;
+    }
+
+   body * {
+        visibility: hidden;
+    }
+
+    #content, #content * {
+        visibility: visible;
+    }
+
+    #content > .object-tools * {
+        visibility: hidden;
+    }
+}

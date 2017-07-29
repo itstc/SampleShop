@@ -1,0 +1,36 @@
+{% extends "shop/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block cssfiles %}
+<link rel="stylesheet" href="{% static 'css/order_create.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="order-header selected">Your Order</h1>
+
+        <form action="." method="post" class="order-form">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value="PLACE ORDER" class="btn btn-order">
+        </form>
+        <div class="order-detail">
+            <h4>Order Details</h4>
+            <ul>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                    <li>{{item.quantity}} x {{product.name}} ({{item.size}}) <span class="right">${{item.total_price}}</span></li>
+                    {% endwith %}
+                {% endfor %}
+                {% if cart.coupon %}
+                <li>
+                    "{{cart.coupon.code}}" ({{cart.coupon.discount}}% Off) <span class="right">- ${{cart.get_discount|floatformat:"2"}}</span>
+                </li>
+                {% endif %}
+            </ul>
+            <p>Total: <span class="right">${{cart.get_total_price_after_discount|floatformat:"2"}}</span></p>
+        </div>
+    </div>
+{% endblock %}

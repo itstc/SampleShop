@@ -1,0 +1,20 @@
+{% extends "shop/base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+Thank You
+{% endblock %}
+
+{% block cssfiles %}
+<link rel="stylesheet" href="{% static 'css/order_created.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="selected">Thank you.</h1>
+        <p>Your order is being processed, an email will be delivered soon. In the meantime, you can continue shopping.
+            <br>
+            <a href="{% url 'shop:product_list' %}" class="btn">CONTINUE SHOPPING</a>
+        </p>
+    </div>
+{% endblock %}

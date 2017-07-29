@@ -1,0 +1,36 @@
+{% extends "shop/base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{product.name}}{% endblock %}
+
+{% block cssfiles %}
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <img class="product-photo" src="{{product.get_photo}}">
+    </img>
+    <div class="product-photos">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="product-detail">
+        <div class="product-header">
+            <h2>{{product.name}}</h2>
+            <h4>${{product.price}}</h4>
+        </div>
+        <div class="form-group">
+            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                {% for field in cart_form %}
+                    {{field}}
+                {% endfor %}
+                {% csrf_token %}
+                <input type="submit" class="btn btn-checkout" value="ADD TO CART">
+            </form>
+        </div>
+        <p>{{product.description|linebreaks}}</p>
+    </div>
+</div>
+{% endblock %}

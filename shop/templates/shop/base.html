@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}My Shop{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block cssfiles %}
+    {% endblock %}
+</head>
+<body>
+
+    <nav class="navbar navbar-default">
+        <a href="{% url 'shop:product_list' %}" class="navbar-brand">SAMPLE SHOP</a>
+        <ul class="nav navbar-nav">
+            <li><a href="">Products</a></li>
+            <li><a href="">Products</a></li>
+            <li><a href="">Products</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right nav-cart">
+            {% with total_items=cart|length %}
+            <li><a href="{% url 'cart:cart_detail' %}">
+                SHOPPING CART ({{total_items}})
+            </a></li>
+            {% endwith %}
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>SAMPLE SHOP 2017</p>
+        <p class="right">Contact Me</p>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        // ping server every 5 minutes
+        setInterval(function() {
+            $.ajax({
+                url: '',
+                cache: false,
+            });
+        }, 300000);
+        $(document).ready(function(){
+            {% block domready %}
+
+            {% endblock %}
+        });
+    </script>
+</body>
+</html>

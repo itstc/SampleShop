@@ -1,0 +1,17 @@
+{% extends "shop/base.html "%}
+{% load staticfiles %}
+
+{% block title %}
+Uh oh
+{% endblock %}
+
+{% block cssfiles %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Looks like your payment has not been processed...</h1>
+    <p><a href="{% url 'shop:product_list'%}">Click here</a> to return to the homepage</p>
+</div>
+{% endblock %}

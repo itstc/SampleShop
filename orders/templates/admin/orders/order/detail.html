@@ -1,0 +1,94 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block title %}
+    Order {{order.id}}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a> &rsaquo;
+    <a href="{% url 'admin:orders_order_changelist' %}">Orders</a> &rsaquo;
+    <a href="{% url 'admin:orders_order_change' order.id %}">Order {{order.id}}</a> &rsaquo;
+    Detail
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Order {{order.id}}</h1>
+<ul class="object-tools">
+    <li><a href="#" onclick="window.print();" class="print">Print order</a></li>
+</ul>
+<table class="table">
+    <tr>
+        <th>Created</th>
+        <td>{{order.created}}</td>
+    </tr>
+    <tr>
+        <th>Customer</th>
+        <td>{{order.get_name}}</td>
+    </tr>
+    <tr>
+        <th>E-mail</th>
+        <td><a href="mailto:{{order.email}}">{{order.email}}</a></td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td>{{ order.address }}, {{ order.postal_code }} {{ order.city}}</td>
+    </tr>
+    <tr>
+        <th>Total amount</th>
+        <td>${{ order.get_total_cost|floatformat:"2" }}</td>
+    </tr>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Product</th>
+            <th class="text-center">Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in order.items.all %}
+        {% with product=item.product %}
+        <tr>
+            <td><a href="{{product.get_absolute_url}}"><img src="{{product.get_photo}}" class="product-photo"></a></td>
+            <td><p><span class="selected">{{product.name}}</span><br>Size: {{item.size}}<br>{{product.description|truncatewords:30}}</p></td>
+            <td class="text-center">{{item.quantity}}</td>
+            <td>${{item.price}}</td>
+        </tr>
+        {% endwith %}
+    {% endfor %}
+    <tbody>
+        {% if order.coupon %}
+        <tr class="total-cell">
+            <td></td>
+            <td></td>
+            <td><span class="right">Subtotal: </span></td>
+            <td>${{order.get_subtotal_cost|floatformat:"2"}}</td>
+        </tr>
+        <tr class="total-cell danger">
+            <td></td>
+            <td></td>
+            <td><span class="right">Discount: </span></td>
+            <td>${{order.get_discount|floatformat:"2"}}</td>
+        </tr>
+        {% endif %}
+        <tr class="total-cell">
+            <td></td>
+            <td></td>
+            <td><span class="right">Total: </span></td>
+            <td>${{order.get_total_cost|floatformat:"2"}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

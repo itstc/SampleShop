@@ -1,0 +1,38 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if category %}{{category.name}}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block cssfiles %}
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <sidebar>
+            <h4>CATEGORIES</h4>
+            <ul class="categories">
+                <li {% if not category %}class="selected"{% endif %}>
+                    <a href="{% url 'shop:product_list' %}">ALL</a>
+                </li>
+                {% for c in categories %}
+                <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+                    <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </sidebar>
+        <content>
+            {% for product in products %}
+            <div class="product text-center">
+                <a href="{{ product.get_absolute_url }}"><img src="{{ product.get_photo}}"></a><br>
+                <a href="{{ product.get_absolute_url }}" class="product-detail selected">{{ product.name }}</a>
+                <br>
+                <a href="{{ product.get_absolute_url }}">${{product.price}}</a>
+            </div>
+            {% endfor %}
+        </content>
+    </div>
+{% endblock %}
