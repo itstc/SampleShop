@@ -42,13 +42,6 @@
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        // ping server every 5 minutes
-        setInterval(function() {
-            $.ajax({
-                url: '',
-                cache: false,
-            });
-        }, 300000);
         $(document).ready(function(){
             {% block domready %}
 

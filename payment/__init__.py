@@ -1,1 +1,1 @@
-django_app_config = 'payment.apps.PaymentConfig'
+default_app_config = 'payment.apps.PaymentConfig'

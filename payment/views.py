@@ -21,7 +21,7 @@ def payment_process(request):
         'currency_code': 'USD',
         'notify_url': 'http://{}{}'.format(host, reverse('paypal-ipn')),
         'return_url': 'http://{}{}'.format(host, reverse('payment:done')),
-        'cancel_return': 'http://{}{}'.format(host, reverse('payment:canceled.html'))
+        'cancel_return': 'http://{}{}'.format(host, reverse('payment:canceled'))
     }
     form = PayPalPaymentsForm(initial=paypal_dict)
     return render(request, 'payment/process.html', {'form': form})
@@ -32,4 +32,6 @@ def payment_done(request):
 
 @csrf_exempt
 def payment_canceled(request):
+    order_id = request.session.get('order_id')
+    get_object_or_404(Order, id=order_id).delete()
     return render(request, 'payment/canceled.html')

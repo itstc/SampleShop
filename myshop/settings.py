@@ -12,27 +12,31 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from .clients import uploadClient
-from imgurpython import ImgurClient
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
+try:
+    from .local_settings import *
+except ImportError:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+    # Storing Images using imgur
+    client_id = os.environ.get('CLIENT_ID')
+    client_secret = os.environ.get('CLIENT_SECRET')
+    refresh_token = os.environ.get('REFRESH_TOKEN')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'paypal.standard.ipn',
     'shop',
     'cart',
     'orders',
@@ -44,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -125,15 +128,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
 
-
-# Storing Images using imgur
-client_id = os.environ['client_id']
-client_secret = os.environ['client_secret']
-refresh_token = os.environ['refresh_token']
-
+# imgur client
 imgur_client = uploadClient(client_id, client_secret, refresh_token=refresh_token)
 
 # Shopping Cart
@@ -147,5 +145,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # django-paypal settings
 PAYPAL_TEST = bool(os.environ.get('PAYPAL_PRODUCTION', True))
 
-if DEBUG:
-    import myshop.local_settings
+# Heroku database config
+import dj_database_url
+dj_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(dj_from_env)
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+PAYPAL_RECEIVER_EMAIL = 'itsthomaschu-facilitator@gmail.com'

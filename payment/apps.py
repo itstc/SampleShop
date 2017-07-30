@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class PaymentConfig(AppConfig):
     name = 'payment'
-    verbose_name = 'Payment'
+    verbose_name = 'payment'
 
     def ready(self):
         import payment.signals
